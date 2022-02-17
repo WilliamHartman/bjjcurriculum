@@ -1,0 +1,35 @@
+.Header {
+    text-align: center;
+    width: 100vw;
+    height: 60px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .header-logo {
+    height: 50px;
+    margin-left: 10px;
+  }
+
+  .header-right {
+    height: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  h3 {
+    margin: 0px;
+  }
+
+  .header-avatar {
+    width: 75px;
+    margin-right: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+  }
