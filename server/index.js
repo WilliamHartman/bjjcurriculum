@@ -29,9 +29,9 @@ app.post(`${baseURL}/updateTechniques`, ctrl.updateTechniques)
 
 
 const path = require('path')
-// app.get('*', (req, res)=>{
-//   res.sendFile(path.join(__dirname, '../build/index.html'));
-// })
+app.get('*', (req, res)=>{
+  res.sendFile(path.join(__dirname, '../build/index.html'));
+})
 
 
 app.listen(process.env.PORT, () => console.log(`Listening on ${process.env.PORT}`));
