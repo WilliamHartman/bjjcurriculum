@@ -17,8 +17,9 @@ class App extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    console.log(process.env.REACT_APP_DEV_BACKEND)
     if(!prevProps.auth0.isAuthenticated && this.props.auth0.isAuthenticated){
-      axios.post(`http://localhost:8082/api/getTechniques`, {user: this.props.auth0.user})
+      axios.post(`${process.env.REACT_APP_DEV_BACKEND}/api/getTechniques`, {user: this.props.auth0.user})
         .then((result) => {
           let techniquesArr = []
           for(let i=1; i<techniques.techniques.length+1; i++){
@@ -34,7 +35,7 @@ class App extends Component {
 
   saveChanges(newTechniques){
     console.log(newTechniques)
-    axios.post(`http://localhost:8082/api/updateTechniques`, {user: this.state.user, newTechniques})
+    axios.post(`${process.env.REACT_APP_DEV_BACKEND}/api/updateTechniques`, {user: this.state.user, newTechniques})
       .then((result) => {
         console.log(result)
         let techniquesArr = []

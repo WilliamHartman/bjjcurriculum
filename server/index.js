@@ -5,12 +5,14 @@ const cors = require('cors')
 require('dotenv').config();
 const massive = require('massive');
 const baseURL = `/api`;
+const morgan = require('morgan');
 
 //Middleware
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 app.use(express.static(__dirname + './../build'));
+app.use(morgan('dev'));
 
 massive({
     connectionString: process.env.CONNECTION_STRING,
