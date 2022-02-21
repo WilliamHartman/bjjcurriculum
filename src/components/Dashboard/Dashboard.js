@@ -1,9 +1,6 @@
 import { useState, useEffect } from 'react';
 import './Dashboard.css';
-import Chip from '@mui/material/Chip';
-import TextField from '@mui/material/TextField';
-import Switch from '@mui/material/Switch';
-import Button from '@mui/material/Button';
+import { Chip, TextField, Switch, Button, Backdrop, CircularProgress, Box, Typography } from '@mui/material'
 
 function grid(techniques, updateTechnique){
     let jsxTechniques = techniques.map((technique)=>{
@@ -11,7 +8,11 @@ function grid(techniques, updateTechnique){
             <div className='dashboard-row-cont' key={technique.number}>
                 <div className='dashboard-row-top-cont'>
                     <h3 className='dashboard-technique-number'>{technique.number}.</h3>
-                    <h3 className='dashboard-technique-title'>{technique.title}</h3>
+                    <h3 className='dashboard-technique-title' onClick={() => {
+                        let joined = technique.title.split(' ').join('+');
+                        console.log(joined)
+                        window.open(`https://www.youtube.com/results?search_query=BJJ+${joined}`)
+                    }}>{technique.title}</h3>
                 </div>
                 <div className='dashboard-row-bot-cont'>
                     <div className='dashboard-switch-cont'>
@@ -35,6 +36,34 @@ function Dashboard(props) {
     const [minSkill, setMinSkill] = useState(0)
     const [maxSkill, setMaxSkill] = useState(2)
     const [searchText, setSearchText] = useState('')
+    const [changeMade, setChangeMade] = useState(false)
+    const [savedOpen, setSavedOpen] = useState(false);
+    const [progress, setProgress] = useState(0);
+    const [isRunning, setIsRunning] = useState(false);
+
+    useEffect(() => {
+        if(isRunning){
+            const timer = setInterval(() => {
+                setProgress((prevProgress) => (prevProgress + 10));
+                }, 100);
+                return () => {
+                    clearInterval(timer);
+                    if(progress >= 150){
+                        setIsRunning(false)
+                        setSavedOpen(false)
+                        setProgress(0)
+                    }
+                };
+        }
+    }, [progress, isRunning]);
+
+    const handleClose = () => {
+      setSavedOpen(false);
+    };
+
+    const handleToggle = () => {
+      setSavedOpen(!savedOpen);
+    };
 
     useEffect(()=>{
         filterTechniques()
@@ -57,6 +86,7 @@ function Dashboard(props) {
         let newTechniquesArr = allTechniques.map(a => {return {...a}})
         newTechniquesArr[technique.number-1] = {number: technique.number, title: technique.title, progress}
         setAllTechniques(newTechniquesArr)
+        setChangeMade(true)
       }
 
     const filterTechniques = () => {
@@ -144,6 +174,10 @@ function Dashboard(props) {
         setSearchText(newSearchText)
     }
 
+    const openSaveAnimation = () => {
+        setIsRunning(true)
+    }
+
     return (
         <div className="Dashboard">
             <div className='dashboard-chips'>
@@ -168,10 +202,42 @@ function Dashboard(props) {
             </div>
             <TextField id="outlined-search" label="Search..." type="search" className='dashboard-search' onChange={(event)=>handleSearch(event.target.value)}/>
             <div style={{marginTop: '10px'}}/>
-            <Button variant="contained" disabled={props.user === null} onClick={()=>props.saveChanges(allTechniques)}>Save</Button>
+            <Button variant="contained" disabled={props.user === null || changeMade === false} onClick={()=>{
+                props.saveChanges(allTechniques)
+                setChangeMade(false)
+                handleToggle()
+                openSaveAnimation()
+                }}>Save</Button>
             <div className='dashboard-grid-cont'>
                 {grid(techniques, updateTechnique)}
             </div>
+            <Backdrop
+                sx={{ color: '#fff', zIndex: 99 }}
+                open={savedOpen}
+                onClick={handleClose}
+            >
+                <div className='dashboard-saved-cont'>
+                    <Box sx={{ position: 'relative', display: 'inline-flex'}}>
+                        <CircularProgress variant="determinate" value={progress >= 100 ? 100 : progress} size={90} color='success'/>
+                        <Box
+                            sx={{
+                            top: 0,
+                            left: 0,
+                            bottom: 0,
+                            right: 0,
+                            position: 'absolute',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            }}
+                        >
+                            <Typography variant="caption" component="div" color={progress >= 110 ? 'green' : 'lightgray'} style={{fontSize: '20px'}}>
+                            {`SAVED`}
+                            </Typography>
+                        </Box>
+                    </Box>
+                </div>
+            </Backdrop>
         </div>
     );
 }

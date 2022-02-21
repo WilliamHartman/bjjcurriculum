@@ -1,6 +1,6 @@
 .Header {
     text-align: center;
-    width: 100vw;
+    width: 90vw;
     height: 60px;
     display: flex;
     flex-direction: row;
@@ -9,8 +9,7 @@
   }
   
   .header-logo {
-    height: 50px;
-    margin-left: 10px;
+    height: 50px;    
   }
 
   .header-right {
@@ -26,8 +25,7 @@
   }
 
   .header-avatar {
-    width: 75px;
-    margin-right: 10px;
+    width: 50px;
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
