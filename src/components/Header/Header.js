@@ -1,7 +1,8 @@
 import React from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import './Header.css';
-import logo from '../../assets/PSBJJAEmblem.png'
+// import logo from '../../assets/PSBJJAEmblem.png'
+import logo from '../../assets/logo.png'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 function Header({login}) {
