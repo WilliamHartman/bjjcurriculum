@@ -289,6 +289,12 @@ function Dashboard(props) {
                         </div>
                     </div>
                     <div className='dashboard-help-subcont'>
+                        <h4 className='dashboard-help-h4'>Video</h4>
+                        <div className='dashboard-help-indent'>
+                            <p className='dashboard-help-p'>{`Clicking on the name of a technique will open a new tab to YouTube with a search field of "BJJ <technique name>".`}</p>
+                        </div>
+                    </div>
+                    <div className='dashboard-help-subcont'>
                         <h4 className='dashboard-help-h4'>Save</h4>
                         <div className='dashboard-help-indent'>
                             <img src={savePNG} style={{height: '40px'}}/>   
