@@ -96,6 +96,7 @@
 .dashboard-help-cont {
     height: 75%;
     width: 90%;
+    max-width: 750px;
     background-color: rgb(240, 240, 240);
     border-radius: 10px;
     display: flex;
