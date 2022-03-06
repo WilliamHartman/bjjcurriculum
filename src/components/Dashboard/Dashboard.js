@@ -1,6 +1,12 @@
 import { useState, useEffect } from 'react';
 import './Dashboard.css';
 import { Chip, TextField, Switch, Button, Backdrop, CircularProgress, Box, Typography } from '@mui/material'
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import chipAll from '../../assets/chip-all.PNG'
+import chipYes from '../../assets/chip-yes.PNG'
+import chipNo from '../../assets/chip-no.PNG'
+import loginPNG from '../../assets/login.PNG'
+import savePNG from '../../assets/save.PNG'
 
 function grid(techniques, updateTechnique){
     let jsxTechniques = techniques.map((technique)=>{
@@ -38,6 +44,7 @@ function Dashboard(props) {
     const [searchText, setSearchText] = useState('')
     const [changeMade, setChangeMade] = useState(false)
     const [savedOpen, setSavedOpen] = useState(false);
+    const [helpOpen, setHelpOpen] = useState(false);
     const [progress, setProgress] = useState(0);
     const [isRunning, setIsRunning] = useState(false);
 
@@ -57,12 +64,20 @@ function Dashboard(props) {
         }
     }, [progress, isRunning]);
 
-    const handleClose = () => {
+    const handleSavedClose = () => {
       setSavedOpen(false);
     };
 
-    const handleToggle = () => {
+    const handleSavedToggle = () => {
       setSavedOpen(!savedOpen);
+    };
+
+    const handleHelpClose = () => {
+      setHelpOpen(false);
+    };
+
+    const handleHelpToggle = () => {
+      setHelpOpen(!savedOpen);
     };
 
     useEffect(()=>{
@@ -176,7 +191,7 @@ function Dashboard(props) {
 
     const openSaveAnimation = () => {
         setIsRunning(true)
-    }
+    } 
 
     return (
         <div className="Dashboard">
@@ -201,11 +216,13 @@ function Dashboard(props) {
                     }}/>    
             </div>
             <TextField id="outlined-search" label="Search..." type="search" className='dashboard-search' onChange={(event)=>handleSearch(event.target.value)}/>
-            <div style={{marginTop: '10px'}}/>
+            <div style={{margin: '10px 0 5px 0'}}>
+                <HelpOutlineIcon onClick={() => handleHelpToggle()} />
+            </div>
             <Button variant="contained" disabled={props.user === null || changeMade === false} onClick={()=>{
                 props.saveChanges(allTechniques)
                 setChangeMade(false)
-                handleToggle()
+                handleSavedToggle()
                 openSaveAnimation()
                 }}>Save</Button>
             <div className='dashboard-grid-cont'>
@@ -214,7 +231,7 @@ function Dashboard(props) {
             <Backdrop
                 sx={{ color: '#fff', zIndex: 99 }}
                 open={savedOpen}
-                onClick={handleClose}
+                onClick={handleSavedClose}
             >
                 <div className='dashboard-saved-cont'>
                     <Box sx={{ position: 'relative', display: 'inline-flex'}}>
@@ -236,6 +253,48 @@ function Dashboard(props) {
                             </Typography>
                         </Box>
                     </Box>
+                </div>
+            </Backdrop>
+            <Backdrop
+                sx={{ color: '#fff', zIndex: 99 }}
+                open={helpOpen}
+                onClick={handleHelpClose}
+            >
+                <div className='dashboard-help-cont'>
+                    <h1>Help</h1>
+                    <div className='dashboard-help-underline'/>
+                    <div className='dashboard-help-subcont'>
+                        <h4 className='dashboard-help-h4'>Login</h4>
+                        <div className='dashboard-help-indent'>
+                            <img src={loginPNG} style={{height: '40px'}}/>   
+                            <p className='dashboard-help-p'>Clicking on the avatar button will redirect you to a login page where you can use your Google or Facebook account to create an account or log in.</p>
+                        </div>
+                    </div>
+                    <div className='dashboard-help-subcont'>
+                        <h4 className='dashboard-help-h4'>Filter buttons</h4>
+                        <div className='dashboard-help-indent'>
+                            <p className='dashboard-help-p'>The filter buttons allow you to filter the list by techniques by learned/not-learned and mastered/not-mastered.</p>
+                            <img src={chipAll} className='dashboard-help-chips'/>
+                            <p className='dashboard-help-p'>The default outlined button means that it will show all, no filtering is taking place.</p>
+                            <img src={chipYes} className='dashboard-help-chips'/>
+                            <p className='dashboard-help-p'>The filled color button means that it will show only techniques that you have learned/mastered.</p>
+                            <img src={chipNo} className='dashboard-help-chips'/>
+                            <p className='dashboard-help-p'>The filled red button means that it will show only techniques that you have NOT learned/mastered.</p>
+                        </div>
+                    </div>
+                    <div className='dashboard-help-subcont'>
+                        <h4 className='dashboard-help-h4'>Search</h4>
+                        <div className='dashboard-help-indent'>
+                            <p className='dashboard-help-p'>Allows you to filter the list by technique name.</p>
+                        </div>
+                    </div>
+                    <div className='dashboard-help-subcont'>
+                        <h4 className='dashboard-help-h4'>Save</h4>
+                        <div className='dashboard-help-indent'>
+                            <img src={savePNG} style={{height: '40px'}}/>   
+                            <p className='dashboard-help-p'>Will save all changes to your user account.</p>
+                        </div>
+                    </div>
                 </div>
             </Backdrop>
         </div>
