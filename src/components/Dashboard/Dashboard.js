@@ -295,6 +295,7 @@ function Dashboard(props) {
                             <p className='dashboard-help-p'>Will save all changes to your user account.</p>
                         </div>
                     </div>
+                    <Button variant="contained" onClick={() => handleHelpClose()} style={{margin: '10px 0 20px 0'}}>Close</Button>
                 </div>
             </Backdrop>
         </div>

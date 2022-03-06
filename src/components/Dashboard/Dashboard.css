@@ -94,7 +94,8 @@
 }
 
 .dashboard-help-cont {
-    height: 75%;
+    min-height: 627px;
+    max-height: 75%;
     width: 90%;
     max-width: 750px;
     background-color: rgb(240, 240, 240);
