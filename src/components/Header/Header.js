@@ -2,7 +2,7 @@ import React from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import './Header.css';
 // import logo from '../../assets/PSBJJAEmblem.png'
-import logo from '../../assets/logo.png'
+import logo from '../../assets/logolarge.png'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 function Header({login}) {
@@ -15,8 +15,8 @@ function Header({login}) {
         <h3>Curriculum Review</h3>
       </div>
       <div className='header-avatar'>
-        {isAuthenticated ? <img src={user.picture} style={{height: '45px', borderRadius: '23px'}}/> :
-          <AccountCircleIcon sx={{ fontSize: 45 }} color="action" onClick={()=> loginWithRedirect()} />}
+        {isAuthenticated ? <img src={user.picture} style={{height: '60px', borderRadius: '23px'}}/> :
+          <AccountCircleIcon sx={{ fontSize: 60 }} color="action" onClick={()=> loginWithRedirect()} />}
       </div>
     </div>
   );
