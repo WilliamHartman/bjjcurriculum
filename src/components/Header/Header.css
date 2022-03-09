@@ -25,9 +25,19 @@
   }
 
   .header-avatar {
-    width: 180px;
+    width: 93px;
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
     align-items: center;
   }
+
+  @media screen and (min-width: 1024px) {
+    .header-logo {
+
+    }
+
+    .header-avatar {
+      width: 180px;
+    }
+}

@@ -3,6 +3,7 @@ import './App.css';
 import axios from 'axios';
 import Header from './components/Header/Header'
 import Dashboard from './components/Dashboard/Dashboard'
+import Help from './components/Help/Help'
 import { withAuth0 } from "@auth0/auth0-react";
 import techniques from "./assets/techniques";
 
@@ -11,9 +12,12 @@ class App extends Component {
     super();
     this.state = {
       user: null,
-      techniquesArr: techniques.techniques
+      techniquesArr: techniques.techniques,
+      displayPage: 'dashboard'
     }  
+
     this.saveChanges = this.saveChanges.bind(this);
+    this.changeDisplayPage = this.changeDisplayPage.bind(this);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -32,6 +36,15 @@ class App extends Component {
     }
   }
 
+  changeDisplayPage(newPage){
+    if(newPage === 'logout'){
+      console.log('logout clicked')
+      this.setState({displayPage: 'dashboard', user: null, techniques: techniques.techniques})
+    } else {
+      this.setState({displayPage: newPage})
+    }
+  }
+
   saveChanges(newTechniques){
     axios.post(`${process.env.REACT_APP_DEV_BACKEND}/api/updateTechniques`, {user: this.state.user, newTechniques})
       .then((result) => {
@@ -46,11 +59,21 @@ class App extends Component {
       })
   }
 
+  router(){
+    switch(this.state.displayPage){
+      case 'dashboard': 
+        return <Dashboard techniquesArr={this.state.techniquesArr} user={this.state.user} saveChanges={this.saveChanges}/>
+      case 'help':
+        return <Help/>
+    }
+  }
+
   render(){
+    console.log(this.state.user)
     return (
       <div className="App">
-        <Header login={this.login}/>
-        <Dashboard techniquesArr={this.state.techniquesArr} user={this.state.user} saveChanges={this.saveChanges}/>
+        <Header login={this.login} changeDisplayPage={this.changeDisplayPage}/>
+        {this.router()}
       </div>
     );
   }
