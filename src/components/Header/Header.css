@@ -12,7 +12,7 @@
     height: 70px;    
   }
 
-  .header-right {
+  .header-title {
     height: 60px;
     display: flex;
     flex-direction: column;

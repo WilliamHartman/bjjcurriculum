@@ -4,7 +4,7 @@ module.exports = {
     getTechniques: (req, res) => {
         const db = req.app.get('db')
         db.get_techniques(req.body.user.email).then((result)=>{
-            let loginTime = timestamp.utc('DD/MM/YYYY - HH:ss:ss')
+            let loginTime = timestamp.utc('MM/DD/YYYY - HH:ss:ss')
             if(result.length === 0){
                 //create a new user
                 db.create_user(req.body.user.name, req.body.user.email, loginTime, loginTime, 'user').then((user)=>{
@@ -15,7 +15,9 @@ module.exports = {
                     })
                 })
             } else {
-                res.status(200).send(result)
+                db.update_login_date(loginTime, result[0].user_id).then(()=>{
+                    res.status(200).send(result)
+                })
             }
         })
     },
@@ -23,7 +25,6 @@ module.exports = {
     updateTechniques: (req, res) => {
         const db = req.app.get('db')
 
-        console.log(req.body.user.userID)
         let a = req.body.newTechniques.map((technique) => technique.progress)
         for(let i=0; i<=a.length; i++){
             console.log(`a[${i}] - ${a[i]} - #${i+1}`)
@@ -47,7 +48,15 @@ module.exports = {
                     res.status(200).send(newResult)
                 })
             })
+    },
 
-        // res.status(200).send('success')
+    updateInstructor: (req, res) => {
+        const db = req.app.get('db')
+        
+        db.update_instructor(req.body.newEmail, req.body.userID).then(()=>{
+            db.get_techniques_id(req.body.userID).then((newResult)=>{
+                res.status(200).send(newResult)
+            })
+        })
     }
 }

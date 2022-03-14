@@ -31,13 +31,13 @@ function Header(props) {
 
   return (
     <div className="Header">
-      <img src={window.innerWidth > 1024 ? logoLarge : logo} className='header-logo' />
-      <div className='header-right'>
+      <img src={window.innerWidth > 1024 ? logoLarge : logo} className='header-logo' onClick={() => props.changeDisplayPage('dashboard')}/>
+      <div className='header-title'>
         <h3>Blue Belt</h3>
         <h3>Curriculum Review</h3>
       </div>
       <div className='header-avatar'>
-        {isAuthenticated ? <img src={user.picture} onClick={handleClick} style={{height: '60px', borderRadius: '30px'}}/> :
+        {isAuthenticated ? <img src={user.picture} onClick={handleClick} style={{height: '60px', width: '60px', borderRadius: '30px'}}/> :
           <AccountCircleIcon sx={{ fontSize: 60 }} color="action" onClick={()=> loginWithRedirect()} />}
       </div>
       <Menu
@@ -54,12 +54,12 @@ function Header(props) {
             <DashboardIcon fontSize="small" />
           </ListItemIcon>
           Dashboard</MenuItem>
-        {/* <MenuItem onClick={() => handleClose('profile')}>
+         <MenuItem onClick={() => handleClose('profile')}>
           <ListItemIcon>
             <AccountCircleIcon fontSize="small" />
           </ListItemIcon>
           Profile</MenuItem>
-        <MenuItem onClick={() => handleClose('students')}>
+        {/* <MenuItem onClick={() => handleClose('students')}>
           <ListItemIcon>
             <PeopleOutlineIcon fontSize="small" />
           </ListItemIcon>

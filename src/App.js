@@ -3,6 +3,7 @@ import './App.css';
 import axios from 'axios';
 import Header from './components/Header/Header'
 import Dashboard from './components/Dashboard/Dashboard'
+import Profile from './components/Profile/Profile'
 import Help from './components/Help/Help'
 import { withAuth0 } from "@auth0/auth0-react";
 import techniques from "./assets/techniques";
@@ -18,6 +19,8 @@ class App extends Component {
 
     this.saveChanges = this.saveChanges.bind(this);
     this.changeDisplayPage = this.changeDisplayPage.bind(this);
+    this.updateInstructor = this.updateInstructor.bind(this);
+    this.fetchTechniques = this.fetchTechniques.bind(this);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -31,14 +34,47 @@ class App extends Component {
             tempObj.progress = result.data[0][key]
             techniquesArr.push(tempObj)
           }
-          this.setState({user: {...this.props.auth0.user, userID: result.data[0].user_id}, techniquesArr})
+          this.setState({
+            user: {
+              ...this.props.auth0.user, 
+              userID: result.data[0].user_id,
+              admin: result.data[0].admin_status,
+              createdDate: result.data[0].created_on,
+              lastLoginDate: result.data[0].last_login,
+              instructor: result.data[0].instructor
+            }, 
+            techniquesArr
+          })
         })
     }
   }
 
+  fetchTechniques(){
+    axios.post(`${process.env.REACT_APP_DEV_BACKEND}/api/getTechniques`, {user: this.props.auth0.user})
+    .then((result) => {
+      let techniquesArr = []
+      for(let i=1; i<techniques.techniques.length+1; i++){
+        let tempObj = techniques.techniques[i-1]
+        let key = `c${i}`
+        tempObj.progress = result.data[0][key]
+        techniquesArr.push(tempObj)
+      }
+      this.setState({
+        user: {
+          ...this.props.auth0.user, 
+          userID: result.data[0].user_id,
+          admin: result.data[0].admin_status,
+          createdDate: result.data[0].created_on,
+          lastLoginDate: result.data[0].last_login,
+          instructor: result.data[0].instructor
+        }, 
+        techniquesArr
+      })
+    })
+  }
+
   changeDisplayPage(newPage){
     if(newPage === 'logout'){
-      console.log('logout clicked')
       this.setState({displayPage: 'dashboard', user: null, techniques: techniques.techniques})
     } else {
       this.setState({displayPage: newPage})
@@ -59,17 +95,41 @@ class App extends Component {
       })
   }
 
+  updateInstructor(newEmail){
+    axios.post(`${process.env.REACT_APP_DEV_BACKEND}/api/updateInstructor`, {userID: this.state.user.userID, newEmail}).then((result)=>{
+      let techniquesArr = []
+      for(let i=1; i<techniques.techniques.length+1; i++){
+        let tempObj = techniques.techniques[i-1]
+        let key = `c${i}`
+        tempObj.progress = result.data[0][key]
+        techniquesArr.push(tempObj)
+      }
+      this.setState({
+        user: {
+          ...this.props.auth0.user, 
+          userID: result.data[0].user_id,
+          admin: result.data[0].admin_status,
+          createdDate: result.data[0].created_on,
+          lastLoginDate: result.data[0].last_login,
+          instructor: result.data[0].instructor
+        }, 
+        techniquesArr
+      })
+    })
+  }
+
   router(){
     switch(this.state.displayPage){
       case 'dashboard': 
         return <Dashboard techniquesArr={this.state.techniquesArr} user={this.state.user} saveChanges={this.saveChanges}/>
       case 'help':
         return <Help/>
+      case 'profile':
+        return <Profile user={this.state.user} techniquesArr={this.state.techniquesArr} updateInstructor={this.updateInstructor} fetchTechniques={this.fetchTechniques}/>
     }
   }
 
   render(){
-    console.log(this.state.user)
     return (
       <div className="App">
         <Header login={this.login} changeDisplayPage={this.changeDisplayPage}/>
