@@ -1,0 +1,14 @@
+.Students {
+    min-height: calc(100vh - 160px);
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.students-select-datagrid-cont {
+    width: 100%;
+    height: calc(100vh - 150px);
+    margin-top: 10px;
+}

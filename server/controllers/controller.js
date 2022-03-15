@@ -58,5 +58,13 @@ module.exports = {
                 res.status(200).send(newResult)
             })
         })
+    },
+
+    getStudents: (req, res) => {
+        const db = req.app.get('db')
+        console.log(req.body)
+        db.get_students(req.body.user.email).then((result)=>{
+            res.status(200).send(result)
+        })
     }
 }

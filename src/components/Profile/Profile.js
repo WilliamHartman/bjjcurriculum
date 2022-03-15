@@ -22,7 +22,6 @@ function Profile(props){
     const handleSubmit = () => {
         setDisableButtons(true);
         props.updateInstructor(instructorEmail)
-        // props.fetchTechniques()
         delay(1000).then(() => {
             setDisableButtons(false);
             setOpen(false);
@@ -37,7 +36,6 @@ function Profile(props){
 
     return (
         <div className='Profile'>
-            {/* <h1>Profile</h1>*/}
             <div className='profile-cont'>
                 <img src={props.user.picture} style={{height: '100px', width: '100px', borderRadius: '50px', marginTop: '25px'}}/>
                 <div className="profile-underline"/> 

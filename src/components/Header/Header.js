@@ -59,11 +59,11 @@ function Header(props) {
             <AccountCircleIcon fontSize="small" />
           </ListItemIcon>
           Profile</MenuItem>
-        {/* <MenuItem onClick={() => handleClose('students')}>
+        <MenuItem onClick={() => handleClose('students')}>
           <ListItemIcon>
             <PeopleOutlineIcon fontSize="small" />
           </ListItemIcon>
-          Students</MenuItem> */}
+          Students</MenuItem>
         <MenuItem onClick={() => handleClose('help')}>
           <ListItemIcon>
             <HelpOutlineIcon fontSize="small" />

@@ -1,0 +1,24 @@
+.Techniques {
+    min-height: calc(100vh - 160px);
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.techniques-select-datagrid-cont {
+    width: 100%;
+    height: calc(100vh - 270px);
+    margin-top: 10px;
+}
+
+.techniques-chips {
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}

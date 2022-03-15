@@ -5,6 +5,7 @@ import Header from './components/Header/Header'
 import Dashboard from './components/Dashboard/Dashboard'
 import Profile from './components/Profile/Profile'
 import Help from './components/Help/Help'
+import Students from './components/Students/Students'
 import { withAuth0 } from "@auth0/auth0-react";
 import techniques from "./assets/techniques";
 
@@ -27,24 +28,30 @@ class App extends Component {
     if(!prevProps.auth0.isAuthenticated && this.props.auth0.isAuthenticated){
       axios.post(`${process.env.REACT_APP_DEV_BACKEND}/api/getTechniques`, {user: this.props.auth0.user})
         .then((result) => {
-          let techniquesArr = []
-          for(let i=1; i<techniques.techniques.length+1; i++){
-            let tempObj = techniques.techniques[i-1]
-            let key = `c${i}`
-            tempObj.progress = result.data[0][key]
-            techniquesArr.push(tempObj)
-          }
-          this.setState({
-            user: {
-              ...this.props.auth0.user, 
-              userID: result.data[0].user_id,
-              admin: result.data[0].admin_status,
-              createdDate: result.data[0].created_on,
-              lastLoginDate: result.data[0].last_login,
-              instructor: result.data[0].instructor
-            }, 
-            techniquesArr
-          })
+          axios.post(`${process.env.REACT_APP_DEV_BACKEND}/api/getStudents`, {user: this.props.auth0.user})
+            .then((studentReturn) => {
+
+              let techniquesArr = []
+              for(let i=1; i<techniques.techniques.length+1; i++){
+                let tempObj = techniques.techniques[i-1]
+                let key = `c${i}`
+                tempObj.progress = result.data[0][key]
+                techniquesArr.push(tempObj)
+              }
+              console.log(studentReturn.data)
+              this.setState({
+                user: {
+                  ...this.props.auth0.user, 
+                  userID: result.data[0].user_id,
+                  admin: result.data[0].admin_status,
+                  createdDate: result.data[0].created_on,
+                  lastLoginDate: result.data[0].last_login,
+                  instructor: result.data[0].instructor
+                }, 
+                techniquesArr,
+                students: studentReturn.data
+              })
+            })
         })
     }
   }
@@ -125,7 +132,9 @@ class App extends Component {
       case 'help':
         return <Help/>
       case 'profile':
-        return <Profile user={this.state.user} techniquesArr={this.state.techniquesArr} updateInstructor={this.updateInstructor} fetchTechniques={this.fetchTechniques}/>
+        return <Profile user={this.state.user} techniquesArr={this.state.techniquesArr} updateInstructor={this.updateInstructor} />
+      case 'students':
+        return <Students user={this.state.user} students={this.state.students}/>
     }
   }
 
