@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import './Techniques.css'
-import { Box, Chip, TextField } from '@mui/material'; 
+import { Box, Chip, TextField, Tooltip } from '@mui/material'; 
 import { DataGrid } from '@mui/x-data-grid';
 import techniques from '../../assets/techniques';
 import CloseIcon from '@mui/icons-material/Close';
@@ -122,18 +122,19 @@ function Techniques(props){
             headerName: student.username.split(' ')[0],
             width: 65,
             editable: false,
+            align: 'center',
             renderCell: (cellValues) => {
                 if(cellValues.value === 0){
                     return (
-                        <CloseIcon />
+                        <Tooltip title='Not Learned'><CloseIcon /></Tooltip>
                     )
                 } else if(cellValues.value === 1){
                     return (
-                        <MenuBookIcon />
+                        <Tooltip title='Learned'><MenuBookIcon /></Tooltip>
                     )
                 } else {
                     return (
-                        <SchoolIcon />
+                        <Tooltip title='Mastered'><SchoolIcon /></Tooltip>
                     )
                 }
                 

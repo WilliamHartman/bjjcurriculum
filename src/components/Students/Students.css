@@ -9,6 +9,7 @@
 
 .students-select-datagrid-cont {
     width: 100%;
+    max-width: 800px;
     height: calc(100vh - 150px);
     margin-top: 10px;
 }

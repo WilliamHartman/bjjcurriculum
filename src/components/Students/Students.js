@@ -13,7 +13,7 @@ function Students(props){
         {
           field: 'name',
           headerName: 'Name',
-          width: 150,
+          width: 200,
           editable: false,
         },
         {
@@ -30,6 +30,14 @@ function Students(props){
         // },
         
       ];
+    if(window.innerWidth > 650){
+        columns.push({
+            field: 'email',
+            headerName: 'Email',
+            width: 250,
+            editable: false,
+        })
+    }
 
     const rows = props.students.map((student) => {
         return {
