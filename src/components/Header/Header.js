@@ -9,17 +9,25 @@ import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import { Menu, MenuItem, ListItemIcon } from '@mui/material'; 
+import AttachMoneyOutlinedIcon from '@mui/icons-material/AttachMoneyOutlined';
+import { Menu, MenuItem, ListItemIcon, Button, Dialog, DialogActions, DialogContent, Dial, DialogTitle, Slide } from '@mui/material'; 
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 function Header(props) {
   const { loginWithRedirect, user, isAuthenticated, isLoading, logout } = useAuth0();
-
+  const [logoutOpen, setLogoutOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
+
+
   const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = (newPage) => {
     setAnchorEl(null);
     if (typeof newPage === 'string') {
@@ -28,6 +36,14 @@ function Header(props) {
         logout({ returnTo: window.location.origin })
       }
     }
+  };
+
+  const handleLogoutOpen = () => {
+    setLogoutOpen(true);
+  };
+
+  const handleLogoutClose = () => {
+    setLogoutOpen(false);
   };
 
   return (
@@ -39,7 +55,7 @@ function Header(props) {
       </div>
       <div className='header-avatar'>
         {isAuthenticated ? <img src={user.picture} onClick={handleClick} style={{height: '60px', width: '60px', borderRadius: '30px'}}/> :
-          <AccountCircleIcon sx={{ fontSize: 60 }} color="action" onClick={()=> loginWithRedirect()} />}
+          <AccountCircleIcon sx={{ fontSize: 60, cursor: 'pointer' }} color="action" onClick={()=> loginWithRedirect()} />}
       </div>
       <Menu
         id="basic-menu"
@@ -75,12 +91,39 @@ function Header(props) {
             <InfoOutlinedIcon fontSize="small" />
           </ListItemIcon>
           About</MenuItem>
-        <MenuItem onClick={() => handleClose('logout')}>
+        <MenuItem onClick={() => handleClose('donate')}>
+          <ListItemIcon>
+            <AttachMoneyOutlinedIcon fontSize="small" />
+          </ListItemIcon>
+          Donate</MenuItem>
+        <MenuItem onClick={() => {
+          setAnchorEl(null)
+          handleLogoutOpen()
+          }}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
           Logout</MenuItem>
       </Menu>
+      <Dialog
+        open={logoutOpen}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={handleLogoutClose}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle>Are you sure you want to logout?</DialogTitle>
+        {/* <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            Let Google help apps determine location. This means sending anonymous
+            location data to Google, even when no apps are running.
+          </DialogContentText>
+        </DialogContent> */}
+        <DialogActions>
+          <Button onClick={handleLogoutClose}>Cancel</Button>
+          <Button onClick={() => handleClose('logout')}>Logout</Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 } 

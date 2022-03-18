@@ -60,6 +60,16 @@ module.exports = {
         })
     },
 
+    updateUsername: (req, res) => {
+        const db = req.app.get('db')
+        
+        db.update_username(req.body.newUsername, req.body.userID).then(()=>{
+            db.get_techniques_id(req.body.userID).then((newResult)=>{
+                res.status(200).send(newResult)
+            })
+        })
+    },
+
     getStudents: (req, res) => {
         const db = req.app.get('db')
         console.log(req.body)

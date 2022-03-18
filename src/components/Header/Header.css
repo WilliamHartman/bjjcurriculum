@@ -1,6 +1,6 @@
 .Header {
     text-align: center;
-    width: 90vw;
+    width: calc(100vw - 50px);
     height: 80px;
     display: flex;
     flex-direction: row;
@@ -9,7 +9,8 @@
   }
   
   .header-logo {
-    height: 70px;    
+    height: 70px;  
+    cursor: pointer;  
   }
 
   .header-title {
@@ -30,6 +31,7 @@
     flex-direction: row;
     justify-content: flex-end;
     align-items: center;
+    cursor: pointer
   }
 
   @media screen and (min-width: 1024px) {

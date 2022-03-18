@@ -1,0 +1,53 @@
+.Donate {
+    min-height: calc(100vh - 60px);
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.donate-underline {
+    height: 1px;
+    width: calc(100% - 20px);
+    max-width: 600px;
+    border-bottom: 1px solid black;
+    margin: 15px 0 0 0;
+}
+
+.donate-cont {
+    width: calc(100% - 10px);
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.donate-content {
+    margin-left: 25px;
+    text-align: left;
+}
+
+.donate-row {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.donate-date {
+    margin-top: 5px;
+}
+
+.donate-row-title {
+    width: 100px;
+    text-align: left;
+}
+
+.donate-row-contents {
+    margin-left: 7px;
+}

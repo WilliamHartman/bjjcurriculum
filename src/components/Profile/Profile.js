@@ -8,8 +8,10 @@ function delay(time) {
 
 function Profile(props){
     const [open, setOpen] = useState(false);
+    const [nameOpen, setNameOpen] = useState(false);
     const [disableButtons, setDisableButtons] = useState(false);
     const [instructorEmail, setInstructorEmail] = useState(props.user.instructor ? props.user.instructor : '');
+    const [username, setUsername] = useState(props.user.username ? props.user.username : '');
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -18,6 +20,14 @@ function Profile(props){
     const handleClose = () => {
         setOpen(false);
     };
+
+    const handleNameClickOpen = () => {
+        setNameOpen(true);
+    };
+
+    const handleNameClose = () => {
+        setNameOpen(false);
+    };
     
     const handleSubmit = () => {
         setDisableButtons(true);
@@ -25,6 +35,15 @@ function Profile(props){
         delay(1000).then(() => {
             setDisableButtons(false);
             setOpen(false);
+        });
+    };
+
+    const handleNameSubmit = () => {
+        setDisableButtons(true);
+        props.updateUsername(username)
+        delay(1000).then(() => {
+            setDisableButtons(false);
+            setNameOpen(false);
         });
     };
 
@@ -45,7 +64,13 @@ function Profile(props){
                 </div>
                 <div className='profile-row'>
                     <h3 className='profile-row-title'>Name: </h3>
-                    <h3 className='profile-row-contents'>{props.user.name}</h3>
+                    <h3 className='profile-row-contents'>{username}</h3>
+                </div>
+                <div className='profile-row'>
+                    <h3 className='profile-row-title'></h3>
+                    <h3 className='profile-row-contents'>
+                        <Button variant='outlined' onClick={handleNameClickOpen}>Change Name</Button>    
+                    </h3>
                 </div>
                 <div className='profile-row'>
                     <h3 className='profile-row-title'>Email: </h3>
@@ -69,7 +94,7 @@ function Profile(props){
                     <TextField
                         autoFocus
                         margin="dense"
-                        id="name"
+                        id="email"
                         placeholder="Email Address"
                         type="email"
                         fullWidth
@@ -81,6 +106,29 @@ function Profile(props){
                 <DialogActions>
                     <Button onClick={handleClose} disabled={disableButtons}>Cancel</Button>
                     <Button onClick={handleSubmit} disabled={disableButtons}>Submit</Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog open={nameOpen} onClose={handleNameClose}>
+                <DialogTitle>Change Name</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Enter the name you would like to be displayed
+                    </DialogContentText>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="name"
+                        placeholder="Name"
+                        type="username"
+                        fullWidth
+                        value={username}
+                        onChange={(e)=>setUsername(e.target.value)}
+                        onKeyPress={(e)=>e.key === 'Enter' ? handleNameSubmit() : null}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleNameClose} disabled={disableButtons}>Cancel</Button>
+                    <Button onClick={handleNameSubmit} disabled={disableButtons}>Submit</Button>
                 </DialogActions>
             </Dialog>
         </div>

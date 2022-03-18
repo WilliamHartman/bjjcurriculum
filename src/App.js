@@ -7,6 +7,7 @@ import Profile from './components/Profile/Profile'
 import Help from './components/Help/Help'
 import Students from './components/Students/Students'
 import About from './components/About/About'
+import Donate from './components/Donate/Donate'
 import { withAuth0 } from "@auth0/auth0-react";
 import techniques from "./assets/techniques";
 
@@ -22,6 +23,7 @@ class App extends Component {
     this.saveChanges = this.saveChanges.bind(this);
     this.changeDisplayPage = this.changeDisplayPage.bind(this);
     this.updateInstructor = this.updateInstructor.bind(this);
+    this.updateUsername = this.updateUsername.bind(this);
     this.fetchTechniques = this.fetchTechniques.bind(this);
   }
 
@@ -39,7 +41,7 @@ class App extends Component {
                 tempObj.progress = result.data[0][key]
                 techniquesArr.push(tempObj)
               }
-              console.log(studentReturn.data)
+              
               this.setState({
                 user: {
                   ...this.props.auth0.user, 
@@ -47,7 +49,8 @@ class App extends Component {
                   admin: result.data[0].admin_status,
                   createdDate: result.data[0].created_on,
                   lastLoginDate: result.data[0].last_login,
-                  instructor: result.data[0].instructor
+                  instructor: result.data[0].instructor,
+                  username: result.data[0].username
                 }, 
                 techniquesArr,
                 students: studentReturn.data
@@ -126,6 +129,29 @@ class App extends Component {
     })
   }
 
+  updateUsername(newUsername){
+    axios.post(`${process.env.REACT_APP_DEV_BACKEND}/api/updateUsername`, {userID: this.state.user.userID, newUsername}).then((result)=>{
+      let techniquesArr = []
+      for(let i=1; i<techniques.techniques.length+1; i++){
+        let tempObj = techniques.techniques[i-1]
+        let key = `c${i}`
+        tempObj.progress = result.data[0][key]
+        techniquesArr.push(tempObj)
+      }
+      this.setState({
+        user: {
+          ...this.props.auth0.user, 
+          userID: result.data[0].user_id,
+          admin: result.data[0].admin_status,
+          createdDate: result.data[0].created_on,
+          lastLoginDate: result.data[0].last_login,
+          instructor: result.data[0].instructor
+        }, 
+        techniquesArr
+      })
+    })
+  }
+
   router(){
     switch(this.state.displayPage){
       case 'dashboard': 
@@ -133,11 +159,13 @@ class App extends Component {
       case 'help':
         return <Help/>
       case 'profile':
-        return <Profile user={this.state.user} techniquesArr={this.state.techniquesArr} updateInstructor={this.updateInstructor} />
+        return <Profile user={this.state.user} techniquesArr={this.state.techniquesArr} updateInstructor={this.updateInstructor} updateUsername={this.updateUsername}/>
       case 'students':
         return <Students user={this.state.user} students={this.state.students}/>
       case 'about':
         return <About user={this.state.user} />
+      case 'donate':
+        return <Donate user={this.state.user} />
     }
   }
 
