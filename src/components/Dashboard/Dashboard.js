@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import './Dashboard.css';
 import { Chip, TextField, Switch, Button, Backdrop, CircularProgress, Box, Typography } from '@mui/material'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
 import chipAll from '../../assets/chip-all.PNG'
 import chipYes from '../../assets/chip-yes.PNG'
 import chipNo from '../../assets/chip-no.PNG'
@@ -14,19 +15,21 @@ function grid(techniques, updateTechnique){
             <div className='dashboard-row-cont' key={technique.number}>
                 <div className='dashboard-row-top-cont'>
                     <h3 className='dashboard-technique-number'>{technique.number}.</h3>
-                    <h3 className='dashboard-technique-title' onClick={() => {
+                    <h3 className='dashboard-technique-title' >{technique.title}</h3>
+                </div>
+                <div className='dashboard-row-bot-cont'>
+                    <OndemandVideoIcon className='dashboard-row-video' onClick={() => {
                         let joined = technique.title.split(' ').join('+');
                         console.log(joined)
                         window.open(`https://www.youtube.com/results?search_query=BJJ+${joined}`)
-                    }}>{technique.title}</h3>
-                </div>
-                <div className='dashboard-row-bot-cont'>
-                    <div className='dashboard-switch-cont'>
+                    }}/>
+                    <div className='dashboard-switch-cont'>    
                         <Switch size='small' onChange={(event)=>updateTechnique(event.target.checked, 'learned', technique)} checked={technique.progress>=1}/>
                         <h5 style={{marginRight: '10px'}}>Learned</h5>
                         <Switch color='success' size='small' onChange={(event)=>updateTechnique(event.target.checked, 'mastered', technique)} checked={technique.progress>=2}/>
                         <h5>Mastered</h5>
                     </div>
+                    <div style={{width: '59px'}}/>
                 </div>
             </div>
         )

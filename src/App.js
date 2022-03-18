@@ -6,6 +6,7 @@ import Dashboard from './components/Dashboard/Dashboard'
 import Profile from './components/Profile/Profile'
 import Help from './components/Help/Help'
 import Students from './components/Students/Students'
+import About from './components/About/About'
 import { withAuth0 } from "@auth0/auth0-react";
 import techniques from "./assets/techniques";
 
@@ -135,6 +136,8 @@ class App extends Component {
         return <Profile user={this.state.user} techniquesArr={this.state.techniquesArr} updateInstructor={this.updateInstructor} />
       case 'students':
         return <Students user={this.state.user} students={this.state.students}/>
+      case 'about':
+        return <About user={this.state.user} />
     }
   }
 

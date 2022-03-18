@@ -70,8 +70,12 @@
     width: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
+}
+
+.dashboard-row-video {
+    margin-left: 35px;
 }
 
 .dashboard-switch-cont {

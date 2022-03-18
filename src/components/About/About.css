@@ -1,0 +1,35 @@
+.About {
+    min-height: calc(100vh - 80px);
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.about-underline {
+    height: 1px;
+    width: 75%;
+    max-width: 500px;
+    border-bottom: 2px solid black;
+    margin-bottom: 15px;
+}
+
+.about-section {
+    width: 75%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-top: 25px;
+}
+
+.about-content {
+    margin-left: 25px;
+    text-align: left;
+}
+
+.paypal {
+    align-self: center;
+}

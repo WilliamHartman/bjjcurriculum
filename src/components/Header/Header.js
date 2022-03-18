@@ -8,6 +8,7 @@ import Logout from '@mui/icons-material/Logout';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { Menu, MenuItem, ListItemIcon } from '@mui/material'; 
 
 function Header(props) {
@@ -69,6 +70,11 @@ function Header(props) {
             <HelpOutlineIcon fontSize="small" />
           </ListItemIcon>
           Help</MenuItem>
+        <MenuItem onClick={() => handleClose('about')}>
+          <ListItemIcon>
+            <InfoOutlinedIcon fontSize="small" />
+          </ListItemIcon>
+          About</MenuItem>
         <MenuItem onClick={() => handleClose('logout')}>
           <ListItemIcon>
             <Logout fontSize="small" />

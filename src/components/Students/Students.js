@@ -21,14 +21,7 @@ function Students(props){
           headerName: 'Last Login',
           width: 100,
           editable: false,
-        },
-        // {
-        //   field: 'email',
-        //   headerName: 'Email',
-        //   width: 150,
-        //   editable: false,
-        // },
-        
+        }        
       ];
     if(window.innerWidth > 650){
         columns.push({
@@ -58,7 +51,7 @@ function Students(props){
 
     const handleTabChange = (event, newTabValue) => {
         setTabValue(newTabValue);
-      };
+    };
 
       
     const selectStudentsTab = () => {
