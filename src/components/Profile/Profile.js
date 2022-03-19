@@ -1,17 +1,35 @@
-import { useState } from 'react';
+import { useState, forwardRef } from 'react';
 import './Profile.css'
-import { Button, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material'; 
+import { Button, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar } from '@mui/material'; 
+import MuiAlert from '@mui/material/Alert';
+import copy from 'copy-to-clipboard';
 
 function delay(time) {
     return new Promise(resolve => setTimeout(resolve, time));
   }
+  
+const Alert = forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 function Profile(props){
     const [open, setOpen] = useState(false);
     const [nameOpen, setNameOpen] = useState(false);
+    const [copyOpen, setCopyOpen] = useState(false);
     const [disableButtons, setDisableButtons] = useState(false);
     const [instructorEmail, setInstructorEmail] = useState(props.user.instructor ? props.user.instructor : '');
     const [username, setUsername] = useState(props.user.username ? props.user.username : '');
+
+    const handleCopyClick = () => {
+        setCopyOpen(true);
+    };
+    
+    const handleCopyClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setCopyOpen(false);
+    };
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -62,7 +80,7 @@ function Profile(props){
                     <h5 className='profile-date'>Last login: {props.user.lastLoginDate.split(' ')[0]}</h5>
                     <h5 className='profile-date'>Date joined: {props.user.createdDate.split(' ')[0]}</h5>
                 </div>
-                <div className='profile-row'>
+                <div className='profile-row' style={{margin: '10px'}}>
                     <h3 className='profile-row-title'>Name: </h3>
                     <h3 className='profile-row-contents'>{username}</h3>
                 </div>
@@ -76,7 +94,7 @@ function Profile(props){
                     <h3 className='profile-row-title'>Email: </h3>
                     <h3 className='profile-row-contents'>{props.user.email}</h3>
                 </div>
-                <div className='profile-row'>
+                <div className='profile-row' >
                     <h3 className='profile-row-title'>Instructor: </h3>
                     <h3 className='profile-row-contents'>{props.user.instructor ? props.user.instructor : changeInstructorButton('Add')}</h3>
                 </div>
@@ -84,7 +102,29 @@ function Profile(props){
                     <h3 className='profile-row-title'></h3>
                     <h3 className='profile-row-contents'>{changeInstructorButton('Change')}</h3>
                 </div> : null}
+                <h3 style={{flexDirection: 'column', marginTop: '25px'}}> Are you an instructor? </h3>
+                <div className='profile-row' style={{marginTop: '20px', marginBottom: '5px'}}>
+                    <h3 className='profile-row-title'>Invite Link: </h3>
+                    <p className='profile-row-link'>{`https://bjjcurr.com/changeInstructor=${props.user.email}`}</p>
+                </div>
+                <div className='profile-row'>
+                    <h3 className='profile-row-title'></h3>
+                    <h3 className='profile-row-contents'>
+                        <Button variant='outlined' onClick={() => {
+                            copy(`https://bjjcurr.com/changeInstructor=${props.user.email}`)
+                            handleCopyClick()
+                            }}>Copy Link
+                        </Button>    
+                    </h3>
+                </div>
             </div>
+             
+            
+            <Snackbar open={copyOpen} autoHideDuration={6000} onClose={handleCopyClose} >
+                <Alert onClose={handleCopyClose} severity="success" sx={{ width: '100%' }} >
+                    Copied link to clipboard!
+                </Alert>
+            </Snackbar>
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>{props.user.instructor ? 'Change' : 'Add'} Instructor</DialogTitle>
                 <DialogContent>

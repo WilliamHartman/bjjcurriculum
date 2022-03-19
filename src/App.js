@@ -10,6 +10,8 @@ import About from './components/About/About'
 import Donate from './components/Donate/Donate'
 import { withAuth0 } from "@auth0/auth0-react";
 import techniques from "./assets/techniques";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material'; 
+
 
 class App extends Component {
   constructor() {
@@ -17,7 +19,8 @@ class App extends Component {
     this.state = {
       user: null,
       techniquesArr: techniques.techniques,
-      displayPage: 'dashboard'
+      displayPage: 'dashboard',
+      updateInstructorModal: false
     }  
 
     this.saveChanges = this.saveChanges.bind(this);
@@ -41,7 +44,7 @@ class App extends Component {
                 tempObj.progress = result.data[0][key]
                 techniquesArr.push(tempObj)
               }
-              
+
               this.setState({
                 user: {
                   ...this.props.auth0.user, 
@@ -54,6 +57,14 @@ class App extends Component {
                 }, 
                 techniquesArr,
                 students: studentReturn.data
+              }, () => {
+                console.log(this.state)
+                let pathname = window.location.pathname.split('=')
+                if(pathname[0] === '/changeInstructor' && pathname.length === 2){
+                  //Add a pop up check modal here
+                  // this.updateInstructor(pathname[1])
+                  this.setState({updateInstructorModal: true})
+                }
               })
             })
         })
@@ -77,7 +88,8 @@ class App extends Component {
           admin: result.data[0].admin_status,
           createdDate: result.data[0].created_on,
           lastLoginDate: result.data[0].last_login,
-          instructor: result.data[0].instructor
+          instructor: result.data[0].instructor,
+          username: result.data[0].username
         }, 
         techniquesArr
       })
@@ -122,7 +134,8 @@ class App extends Component {
           admin: result.data[0].admin_status,
           createdDate: result.data[0].created_on,
           lastLoginDate: result.data[0].last_login,
-          instructor: result.data[0].instructor
+          instructor: result.data[0].instructor,
+          username: result.data[0].username
         }, 
         techniquesArr
       })
@@ -145,7 +158,8 @@ class App extends Component {
           admin: result.data[0].admin_status,
           createdDate: result.data[0].created_on,
           lastLoginDate: result.data[0].last_login,
-          instructor: result.data[0].instructor
+          instructor: result.data[0].instructor,
+          username: result.data[0].username
         }, 
         techniquesArr
       })
@@ -174,6 +188,22 @@ class App extends Component {
       <div className="App">
         <Header login={this.login} changeDisplayPage={this.changeDisplayPage}/>
         {this.router()}
+        <Dialog open={this.state.updateInstructorModal} onClose={()=>this.setState({updateInstructorModal: false})}>
+                <DialogTitle>Change Instructor</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Are you sure you want to change your instructor's email address to {window.location.pathname.split('=')[1]}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={()=>this.setState({updateInstructorModal: false})}>No</Button>
+                    <Button onClick={()=>{
+                      this.updateInstructor(window.location.pathname.split('=')[1])
+                      this.setState({updateInstructorModal: false})
+                      }}>Yes
+                    </Button>
+                </DialogActions>
+            </Dialog>
       </div>
     );
   }

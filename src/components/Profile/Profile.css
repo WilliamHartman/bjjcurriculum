@@ -44,6 +44,15 @@
 
 .profile-row-contents {
     margin-left: 7px;
+    overflow-x: scroll;
+}
+
+.profile-row-link {
+    margin: 0 0 0 7px;
+    max-width: calc(100% - 130px);
+    line-height: 35px;
+    height: 35px;
+    overflow-x: scroll;
 }
 
 @media screen and (max-width: 400px) {
