@@ -44,7 +44,6 @@
 
 .profile-row-contents {
     margin-left: 7px;
-    overflow-x: scroll;
 }
 
 .profile-row-link {
@@ -52,7 +51,7 @@
     max-width: calc(100% - 130px);
     line-height: 35px;
     height: 35px;
-    overflow-x: scroll;
+    overflow-x: auto;
 }
 
 @media screen and (max-width: 400px) {
@@ -62,4 +61,13 @@
     .profile-row-contents {
        font-size: 15px; 
     }
+    
+}
+
+@media screen and (min-width: 450px) {
+    .profile-row-link::-webkit-scrollbar {
+        width: 2px;
+        height: 2px;
+        background-color: #ccc;
+    } 
 }
