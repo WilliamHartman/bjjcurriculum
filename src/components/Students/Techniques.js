@@ -116,7 +116,6 @@ function Techniques(props){
     }
 
     const columns = props.students.map((student) => {
-        console.log(student)
         return {
             id: student.user_id,
             field: `${student.user_id}`,
@@ -125,7 +124,6 @@ function Techniques(props){
             editable: false,
             align: 'center',
             renderCell: (cellValues) => {
-                console.log(cellValues)
                 if(cellValues.value === 0){
                     return (
                         <Tooltip title='Not Learned'><CloseIcon /></Tooltip>
@@ -149,7 +147,6 @@ function Techniques(props){
         width: 250,
         editable: false,
     })
-    console.log(columns)
 
     // const initialRows = () => {
     //     let resetRows = techniques.techniques.map((technique, index) => {
