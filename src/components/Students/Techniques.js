@@ -21,7 +21,7 @@ function Techniques(props){
             technique: `${technique.number} - ${technique.title}`,
         }
         props.students.forEach((student) => {
-            rowObj[student.username] = student[`c${index+1}`]
+            rowObj[student.user_id] = student[`c${index+1}`]
         })
         return rowObj
     }));
@@ -31,7 +31,7 @@ function Techniques(props){
             technique: `${technique.number} - ${technique.title}`,
         }
         props.students.forEach((student) => {
-            rowObj[student.username] = student[`c${index+1}`]
+            rowObj[student.user_id] = student[`c${index+1}`]
         })
         return rowObj
     }));
@@ -116,13 +116,16 @@ function Techniques(props){
     }
 
     const columns = props.students.map((student) => {
+        console.log(student)
         return {
-            field: student.username,
+            id: student.user_id,
+            field: `${student.user_id}`,
             headerName: student.username.split(' ')[0],
             width: 65,
             editable: false,
             align: 'center',
             renderCell: (cellValues) => {
+                console.log(cellValues)
                 if(cellValues.value === 0){
                     return (
                         <Tooltip title='Not Learned'><CloseIcon /></Tooltip>
@@ -146,6 +149,7 @@ function Techniques(props){
         width: 250,
         editable: false,
     })
+    console.log(columns)
 
     // const initialRows = () => {
     //     let resetRows = techniques.techniques.map((technique, index) => {
