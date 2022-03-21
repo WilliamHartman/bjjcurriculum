@@ -20,7 +20,6 @@ function grid(techniques, updateTechnique){
                 <div className='dashboard-row-bot-cont'>
                     <OndemandVideoIcon className='dashboard-row-video' onClick={() => {
                         let joined = technique.title.split(' ').join('+');
-                        console.log(joined)
                         window.open(`https://www.youtube.com/results?search_query=BJJ+${joined}`)
                     }}/>
                     <div className='dashboard-switch-cont'>    

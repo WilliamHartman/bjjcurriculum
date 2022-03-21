@@ -37,7 +37,6 @@ function Techniques(props){
     }));
 
     useEffect(()=>{
-        console.log('filtering rows')
         filterRows()
     }, [searchText, minSkill, maxSkill])
 

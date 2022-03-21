@@ -76,6 +76,7 @@
 
 .dashboard-row-video {
     margin-left: 35px;
+    cursor: pointer;
 }
 
 .dashboard-switch-cont {

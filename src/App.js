@@ -41,11 +41,9 @@ class App extends Component {
   }
 
   componentDidMount() { 
-    console.log('Component did mount')
     const { cookies } = this.props;
     if(window.location.pathname.split('=')[0] === '/changeInstructor'){
       let newInstructorEmail = window.location.pathname.split('=')[1]
-      console.log('Save pathname')
 
       cookies.set('newInstructorEmail', newInstructorEmail, { path: '/' });
       this.setState({ newInstructorEmail });
@@ -80,11 +78,8 @@ class App extends Component {
                 techniquesArr,
                 students: studentReturn.data
               }, () => {
-                console.log(this.state)
                 const { cookies } = this.props;
                 let newInstructorEmail = cookies.cookies.newInstructorEmail
-                console.log(cookies.cookies)
-                let pathname = window.location.pathname.split('=')
                 if(newInstructorEmail){
                   if(newInstructorEmail.length > 0){
                     cookies.set('newInstructorEmail', '', { path: '/' });

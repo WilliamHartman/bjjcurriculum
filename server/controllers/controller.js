@@ -26,9 +26,7 @@ module.exports = {
         const db = req.app.get('db')
 
         let a = req.body.newTechniques.map((technique) => technique.progress)
-        for(let i=0; i<=a.length; i++){
-            console.log(`a[${i}] - ${a[i]} - #${i+1}`)
-        }
+
         db.update_techniques(a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7], a[8], a[9], 
             a[10], a[11], a[12], a[13], a[14], a[15],
             a[16], a[17], a[18], a[19], a[20], a[21],
@@ -72,7 +70,7 @@ module.exports = {
 
     getStudents: (req, res) => {
         const db = req.app.get('db')
-        console.log(req.body)
+
         db.get_students(req.body.user.email).then((result)=>{
             res.status(200).send(result)
         })
