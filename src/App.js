@@ -11,16 +11,26 @@ import Donate from './components/Donate/Donate'
 import { withAuth0 } from "@auth0/auth0-react";
 import techniques from "./assets/techniques";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material'; 
+import { instanceOf } from 'prop-types';
+import { withCookies, Cookies } from 'react-cookie';
 
 
 class App extends Component {
-  constructor() {
-    super();
+  static propTypes = {
+    cookies: instanceOf(Cookies).isRequired
+  }; 
+
+  constructor(props) {
+    super(props);
+
+    const { cookies } = props;
+
     this.state = {
       user: null,
       techniquesArr: techniques.techniques,
       displayPage: 'dashboard',
-      updateInstructorModal: false
+      updateInstructorModal: false,
+      newInstructorEmail: cookies.get('newInstructorEmail') || ''
     }  
 
     this.saveChanges = this.saveChanges.bind(this);
@@ -28,6 +38,18 @@ class App extends Component {
     this.updateInstructor = this.updateInstructor.bind(this);
     this.updateUsername = this.updateUsername.bind(this);
     this.fetchTechniques = this.fetchTechniques.bind(this);
+  }
+
+  componentDidMount() { 
+    console.log('Component did mount')
+    const { cookies } = this.props;
+    if(window.location.pathname.split('=')[0] === '/changeInstructor'){
+      let newInstructorEmail = window.location.pathname.split('=')[1]
+      console.log('Save pathname')
+
+      cookies.set('newInstructorEmail', newInstructorEmail, { path: '/' });
+      this.setState({ newInstructorEmail });
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -59,10 +81,12 @@ class App extends Component {
                 students: studentReturn.data
               }, () => {
                 console.log(this.state)
+                const { cookies } = this.props;
+                let newInstructorEmail = cookies.cookies.newInstructorEmail
+                console.log(cookies.cookies)
                 let pathname = window.location.pathname.split('=')
-                if(pathname[0] === '/changeInstructor' && pathname.length === 2){
-                  //Add a pop up check modal here
-                  // this.updateInstructor(pathname[1])
+                if(newInstructorEmail.length > 0){
+                  cookies.set('newInstructorEmail', '', { path: '/' });
                   this.setState({updateInstructorModal: true})
                 }
               })
@@ -209,4 +233,4 @@ class App extends Component {
   }
 }
 
-export default withAuth0(App);
+export default withAuth0(withCookies(App));
