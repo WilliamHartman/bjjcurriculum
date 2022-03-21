@@ -85,9 +85,11 @@ class App extends Component {
                 let newInstructorEmail = cookies.cookies.newInstructorEmail
                 console.log(cookies.cookies)
                 let pathname = window.location.pathname.split('=')
-                if(newInstructorEmail.length > 0){
-                  cookies.set('newInstructorEmail', '', { path: '/' });
-                  this.setState({updateInstructorModal: true})
+                if(newInstructorEmail){
+                  if(newInstructorEmail.length > 0){
+                    cookies.set('newInstructorEmail', '', { path: '/' });
+                    this.setState({updateInstructorModal: true, newInstructorEmail})
+                  }
                 }
               })
             })
@@ -216,13 +218,13 @@ class App extends Component {
                 <DialogTitle>Change Instructor</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Are you sure you want to change your instructor's email address to {window.location.pathname.split('=')[1]}
+                        Are you sure you want to change your instructor's email address to {this.state.newInstructorEmail}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={()=>this.setState({updateInstructorModal: false})}>No</Button>
                     <Button onClick={()=>{
-                      this.updateInstructor(window.location.pathname.split('=')[1])
+                      this.updateInstructor(this.state.newInstructorEmail)
                       this.setState({updateInstructorModal: false})
                       }}>Yes
                     </Button>
