@@ -3,6 +3,7 @@ import './Profile.css'
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar } from '@mui/material'; 
 import MuiAlert from '@mui/material/Alert';
 import copy from 'copy-to-clipboard';
+import QRCode from 'qrcode.react';
 
 function delay(time) {
     return new Promise(resolve => setTimeout(resolve, time));
@@ -117,6 +118,7 @@ function Profile(props){
                         </Button>    
                     </h3>
                 </div>
+                <QRCode value={`https://bjjcurr.com/changeInstructor=${props.user.email}`} />
             </div>
              
             
