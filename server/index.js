@@ -28,6 +28,7 @@ massive({
 //Endpoints
 app.post(`${baseURL}/getTechniques`, ctrl.getTechniques)
 app.post(`${baseURL}/getStudents`, ctrl.getStudents)
+app.post(`${baseURL}/getUserByEmail`, ctrl.getUserByEmail)
 app.post(`${baseURL}/updateTechniques`, ctrl.updateTechniques)
 app.post(`${baseURL}/updateInstructor`, ctrl.updateInstructor)
 app.post(`${baseURL}/updateUsername`, ctrl.updateUsername)

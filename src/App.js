@@ -30,7 +30,8 @@ class App extends Component {
       techniquesArr: techniques.techniques,
       displayPage: 'dashboard',
       updateInstructorModal: false,
-      newInstructorEmail: cookies.get('newInstructorEmail') || ''
+      newInstructorEmail: cookies.get('newInstructorEmail') || '',
+      instructorInfo: {username: ''}
     }  
 
     this.saveChanges = this.saveChanges.bind(this);
@@ -56,37 +57,43 @@ class App extends Component {
         .then((result) => {
           axios.post(`${process.env.REACT_APP_DEV_BACKEND}/api/getStudents`, {user: this.props.auth0.user})
             .then((studentReturn) => {
-
-              let techniquesArr = []
-              for(let i=1; i<techniques.techniques.length+1; i++){
-                let tempObj = techniques.techniques[i-1]
-                let key = `c${i}`
-                tempObj.progress = result.data[0][key]
-                techniquesArr.push(tempObj)
-              }
-
-              this.setState({
-                user: {
-                  ...this.props.auth0.user, 
-                  userID: result.data[0].user_id,
-                  admin: result.data[0].admin_status,
-                  createdDate: result.data[0].created_on,
-                  lastLoginDate: result.data[0].last_login,
-                  instructor: result.data[0].instructor,
-                  username: result.data[0].username
-                }, 
-                techniquesArr,
-                students: studentReturn.data
-              }, () => {
-                const { cookies } = this.props;
-                let newInstructorEmail = cookies.cookies.newInstructorEmail
-                if(newInstructorEmail){
-                  if(newInstructorEmail.length > 0){
-                    cookies.set('newInstructorEmail', '', { path: '/' });
-                    this.setState({updateInstructorModal: true, newInstructorEmail})
+              axios.post(`${process.env.REACT_APP_DEV_BACKEND}/api/getUserByEmail`, {email: result.data[0].instructor})
+                .then((instructorInfo) => {
+                  let techniquesArr = []
+                  for(let i=1; i<techniques.techniques.length+1; i++){
+                    let tempObj = techniques.techniques[i-1]
+                    let key = `c${i}`
+                    tempObj.progress = result.data[0][key]
+                    techniquesArr.push(tempObj)
                   }
-                }
-              })
+
+                  this.setState({
+                    user: {
+                      ...this.props.auth0.user, 
+                      userID: result.data[0].user_id,
+                      admin: result.data[0].admin_status,
+                      createdDate: result.data[0].created_on,
+                      lastLoginDate: result.data[0].last_login,
+                      instructor: result.data[0].instructor,
+                      username: result.data[0].username,
+                    }, 
+                    techniquesArr,
+                    students: studentReturn.data,
+                    instructorInfo: instructorInfo.data[0]
+                  }, () => {
+                    const { cookies } = this.props;
+                    let newInstructorEmail = cookies.cookies.newInstructorEmail
+                    if(newInstructorEmail){
+                      if(newInstructorEmail.length > 0){
+                        axios.post(`${process.env.REACT_APP_DEV_BACKEND}/api/getUserByEmail`, {email: newInstructorEmail})
+                          .then((newInstructorInfo) => {
+                            this.setState({updateInstructorModal: true, newInstructorEmail, instructorInfo: newInstructorInfo.data[0]})
+                            cookies.set('newInstructorEmail', '', { path: '/' });
+                          })
+                      }
+                    }
+                  })
+                })              
             })
         })
     }
@@ -141,25 +148,29 @@ class App extends Component {
 
   updateInstructor(newEmail){
     axios.post(`${process.env.REACT_APP_DEV_BACKEND}/api/updateInstructor`, {userID: this.state.user.userID, newEmail}).then((result)=>{
-      let techniquesArr = []
-      for(let i=1; i<techniques.techniques.length+1; i++){
-        let tempObj = techniques.techniques[i-1]
-        let key = `c${i}`
-        tempObj.progress = result.data[0][key]
-        techniquesArr.push(tempObj)
-      }
-      this.setState({
-        user: {
-          ...this.props.auth0.user, 
-          userID: result.data[0].user_id,
-          admin: result.data[0].admin_status,
-          createdDate: result.data[0].created_on,
-          lastLoginDate: result.data[0].last_login,
-          instructor: result.data[0].instructor,
-          username: result.data[0].username
-        }, 
-        techniquesArr
-      })
+      axios.post(`${process.env.REACT_APP_DEV_BACKEND}/api/getUserByEmail`, {email: newEmail})
+        .then((newInstructorInfo) => {
+          let techniquesArr = []
+          for(let i=1; i<techniques.techniques.length+1; i++){
+            let tempObj = techniques.techniques[i-1]
+            let key = `c${i}`
+            tempObj.progress = result.data[0][key]
+            techniquesArr.push(tempObj)
+          }
+          this.setState({
+            user: {
+              ...this.props.auth0.user, 
+              userID: result.data[0].user_id,
+              admin: result.data[0].admin_status,
+              createdDate: result.data[0].created_on,
+              lastLoginDate: result.data[0].last_login,
+              instructor: result.data[0].instructor,
+              username: result.data[0].username
+            }, 
+            techniquesArr,
+            instructorInfo: newInstructorInfo.data[0]
+          })
+        })
     })
   }
 
@@ -194,7 +205,7 @@ class App extends Component {
       case 'help':
         return <Help/>
       case 'profile':
-        return <Profile user={this.state.user} techniquesArr={this.state.techniquesArr} updateInstructor={this.updateInstructor} updateUsername={this.updateUsername}/>
+        return <Profile user={this.state.user} techniquesArr={this.state.techniquesArr} updateInstructor={this.updateInstructor} updateUsername={this.updateUsername} instructorInfo={this.state.instructorInfo}/>
       case 'students':
         return <Students user={this.state.user} students={this.state.students}/>
       case 'about':
@@ -213,7 +224,9 @@ class App extends Component {
                 <DialogTitle>Change Instructor</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Are you sure you want to change your instructor's email address to {this.state.newInstructorEmail}
+                        {this.state.instructorInfo.username === '' ? 
+                        `Are you sure you want to change your instructor's email address to ${this.state.newInstructorEmail}` :
+                        `Are you sure you want to change your instructor to ${this.state.instructorInfo.username}`}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>

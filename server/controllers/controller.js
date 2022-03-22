@@ -74,5 +74,13 @@ module.exports = {
         db.get_students(req.body.user.email).then((result)=>{
             res.status(200).send(result)
         })
+    },
+
+    getUserByEmail: (req, res) => {
+        const db = req.app.get('db')
+
+        db.get_user_by_email(req.body.email).then((result)=>{
+            res.status(200).send(result)
+        })
     }
 }

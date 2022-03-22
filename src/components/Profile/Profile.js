@@ -96,7 +96,7 @@ function Profile(props){
                 </div>
                 <div className='profile-row' >
                     <h3 className='profile-row-title'>Instructor: </h3>
-                    <h3 className='profile-row-contents'>{props.user.instructor ? props.user.instructor : changeInstructorButton('Add')}</h3>
+                    <h3 className='profile-row-contents'>{props.user.instructor ? props.instructorInfo.username : changeInstructorButton('Add')}</h3>
                 </div>
                 {props.user.instructor ? <div className='profile-row'>
                     <h3 className='profile-row-title'></h3>
