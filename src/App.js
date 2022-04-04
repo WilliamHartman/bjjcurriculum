@@ -79,7 +79,7 @@ class App extends Component {
                     }, 
                     techniquesArr,
                     students: studentReturn.data,
-                    instructorInfo: instructorInfo.data[0]
+                    instructorInfo: instructorInfo.data.length !== 0 ? instructorInfo.data[0] : {username: ''}
                   }, () => {
                     const { cookies } = this.props;
                     let newInstructorEmail = cookies.cookies.newInstructorEmail
@@ -87,7 +87,7 @@ class App extends Component {
                       if(newInstructorEmail.length > 0){
                         axios.post(`${process.env.REACT_APP_DEV_BACKEND}/api/getUserByEmail`, {email: newInstructorEmail})
                           .then((newInstructorInfo) => {
-                            this.setState({updateInstructorModal: true, newInstructorEmail, instructorInfo: newInstructorInfo.data[0]})
+                            this.setState({updateInstructorModal: true, newInstructorEmail, instructorInfo: newInstructorInfo.data.length !== 0 ? newInstructorInfo.data[0] : {username: ''} })
                             cookies.set('newInstructorEmail', '', { path: '/' });
                           })
                       }
@@ -157,6 +157,7 @@ class App extends Component {
             tempObj.progress = result.data[0][key]
             techniquesArr.push(tempObj)
           }
+          
           this.setState({
             user: {
               ...this.props.auth0.user, 
@@ -168,7 +169,7 @@ class App extends Component {
               username: result.data[0].username
             }, 
             techniquesArr,
-            instructorInfo: newInstructorInfo.data[0]
+            instructorInfo: newInstructorInfo.data.length !== 0 ? newInstructorInfo.data[0] : {username: ''}
           })
         })
     })
